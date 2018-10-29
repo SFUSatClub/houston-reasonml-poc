@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
+    "start": "bsb -make-world && node src/index.js",
     "clean": "bsb -clean-world"
   },
   "keywords": [
