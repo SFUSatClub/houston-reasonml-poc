@@ -1,3 +1,46 @@
 type Query {
   info: String!
 }
+
+type Mutation {
+  createCommandSequence(sequence: CommandSequenceInput!): CommandSequence!
+}
+
+input CommandSequenceInput {
+  name: String!
+  description: String!
+  commands: [CommandInput!]!
+}
+
+input CommandInput {
+  name: String!
+  timeout: Int!
+  wait: Int!
+  arguments: [CommandArgumentInput!]!
+}
+
+input CommandArgumentInput {
+  name: String!
+  value: String!
+}
+
+type CommandSequence {
+  id: ID!
+  name: String!
+  description: String!
+  commands: [Command!]!
+}
+
+type Command {
+  id: ID!
+  name: String!
+  timeout: Int!
+  wait: Int!
+  arguments: [CommandArgument!]!
+}
+
+type CommandArgument {
+  id: ID!
+  name: String!
+  value: String!
+}
