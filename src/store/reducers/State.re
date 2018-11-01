@@ -16,6 +16,7 @@ let initialUplinkState = {
   inProgress: false,
 };
 
+[@bs.deriving jsConverter]
 type state = {uplink: uplinkState};
 
 let initialState = {uplink: initialUplinkState};

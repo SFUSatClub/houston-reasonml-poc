@@ -11,8 +11,20 @@ var initialUplinkState = /* record */[
   /* inProgress */false
 ];
 
+function stateToJs(param) {
+  return {
+          uplink: param[/* uplink */0]
+        };
+}
+
+function stateFromJs(param) {
+  return /* record */[/* uplink */param.uplink];
+}
+
 var initialState = /* record */[/* uplink */initialUplinkState];
 
 exports.initialUplinkState = initialUplinkState;
+exports.stateToJs = stateToJs;
+exports.stateFromJs = stateFromJs;
 exports.initialState = initialState;
 /* No side effect */
