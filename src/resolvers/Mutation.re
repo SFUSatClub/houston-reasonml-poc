@@ -24,7 +24,8 @@ let createCommandSequence = (_root, args) => {
 type mutation = {
   .
   "createCommandSequence":
-    (root, createCommandSequenceArg) => Js.Promise.t(commandSequence),
+    (root, {. "sequence": commandSequenceInput}) =>
+    Js.Promise.t(commandSequence),
 };
 
 let resolvers: mutation = {"createCommandSequence": createCommandSequence};

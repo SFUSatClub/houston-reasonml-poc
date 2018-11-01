@@ -1,7 +1,5 @@
 type root;
 
-type commandSequenceArg = {. "id": string};
-
 [@bs.val] [@bs.module "./helpers"]
 external readJsonFile : string => Js.Promise.t(Schema.commandSequence) = "";
 
@@ -9,7 +7,7 @@ type query = {
   .
   "info": unit => string,
   "commandSequence":
-    (root, commandSequenceArg) => Js.Promise.t(Schema.commandSequence),
+    (root, {. "id": string}) => Js.Promise.t(Schema.commandSequence),
 };
 
 let resolvers: query = {

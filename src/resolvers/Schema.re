@@ -42,5 +42,3 @@ type commandSequenceInput = {
   "description": string,
   "commands": list(commandInput),
 };
-
-type createCommandSequenceArg = {. "sequence": commandSequenceInput};
