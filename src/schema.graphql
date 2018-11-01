@@ -7,6 +7,10 @@ type Mutation {
   createCommandSequence(sequence: CommandSequenceInput!): CommandSequence!
 }
 
+type Subscription {
+  state: State!
+}
+
 input CommandSequenceInput {
   name: String!
   description: String!
@@ -44,4 +48,17 @@ type CommandArgument {
   id: ID!
   name: String!
   value: String!
+}
+
+type UplinkState {
+  inProgress: Boolean!
+  sequenceId: ID
+  pending: [ID!]!
+  unresolved: [ID!]!
+  successful: [ID!]!
+  failed: [ID!]!
+}
+
+type State {
+  uplink: UplinkState!
 }
