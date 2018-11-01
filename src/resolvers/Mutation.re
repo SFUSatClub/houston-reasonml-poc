@@ -28,4 +28,5 @@ type mutation = {
     Js.Promise.t(commandSequence),
 };
 
-let resolvers: mutation = {"createCommandSequence": createCommandSequence};
+let resolvers: Store.t(State.state, Action.action) => mutation =
+  _store => {"createCommandSequence": createCommandSequence};

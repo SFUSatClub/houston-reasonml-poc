@@ -12,9 +12,11 @@ function createCommandSequence(_, args) {
               }));
 }
 
-var resolvers = {
-  createCommandSequence: createCommandSequence
-};
+function resolvers() {
+  return {
+          createCommandSequence: createCommandSequence
+        };
+}
 
 exports.createCommandSequence = createCommandSequence;
 exports.resolvers = resolvers;

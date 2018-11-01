@@ -10,10 +10,11 @@ type query = {
     (root, {. "id": string}) => Js.Promise.t(Schema.commandSequence),
 };
 
-let resolvers: query = {
-  "info": () => "Houston ReasonML PoC: Houston is SFU Satellite design team's ground control station",
-  "commandSequence": (_root, args) => {
-    let path = "src/command_sequence/" ++ args##id ++ ".json";
-    readJsonFile(path);
-  },
-};
+let resolvers: Store.t(State.state, Action.action) => query =
+  _store => {
+    "info": () => "Houston ReasonML PoC: Houston is SFU Satellite design team's ground control station",
+    "commandSequence": (_root, args) => {
+      let path = "src/command_sequence/" ++ args##id ++ ".json";
+      readJsonFile(path);
+    },
+  };
