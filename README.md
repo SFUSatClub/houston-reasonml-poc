@@ -1,18 +1,49 @@
-# Basic Reason Template
+# Getting stated
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
+- first [setup ReasonML](https://reasonml.github.io/docs/en/installation)
+- then `npm install` and `npm start` and go to http://localhost:4000
 
-# Build
+## Create a command sequence
+
+```graphql
+mutation {
+  createCommandSequence(
+    sequence: {
+      name: "sn"
+      description: "sd"
+      commands: [{ name: "cn", timeout: 14000, wait: 4000, arguments: [] }]
+    }
+  ) {
+    id
+  }
+}
 ```
-npm run build
+
+## Listen for state changes
+
+In a new tab
+
+```graphql
+subscription {
+  state: {
+    uplink {
+      inProgress
+      sequenceId
+      pending
+      unresolved
+      successful
+      failed
+    }
+  }
+}
 ```
 
-# Build + Watch
+## Execute the command sequence
 
+In a new tab
+
+```graphql
+mutation {
+  executeCommandSequence(id: "fd9220efed406a1a0324398e8e44d71a44b65d11")
+}
 ```
-npm run start
-```
-
-
-# Editor
-If you use `vscode`, Press `Windows + Shift + B` it will build automatically
