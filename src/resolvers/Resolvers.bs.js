@@ -14,9 +14,7 @@ var publish = ((pubsub, serializableState) => { pubsub.publish("STATE", serializ
 function init(pubsub) {
   var store = Store$HoustonPocReasonml.create(Reducer$HoustonPocReasonml.reducer, State$HoustonPocReasonml.initialState);
   Store$HoustonPocReasonml.subscribe(store, (function (state) {
-          return Curry._2(publish, pubsub, {
-                      state: State$HoustonPocReasonml.stateToJs(state)
-                    });
+          return Curry._2(publish, pubsub, State$HoustonPocReasonml.serialize(state));
         }));
   return {
           Query: Query$HoustonPocReasonml.resolvers(store),

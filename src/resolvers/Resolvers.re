@@ -1,6 +1,6 @@
 type pubsub;
 
-let publish = [%bs.raw
+let publish: (pubsub, State.serializableType) => unit = [%bs.raw
   {|(pubsub, serializableState) => { pubsub.publish("STATE", serializableState)}|}
 ];
 
@@ -10,9 +10,7 @@ external subscriptions : stateAsyncIterator = "";
 
 let init = (pubsub: pubsub) => {
   let store = Store.create(Reducer.reducer, State.initialState);
-  Store.subscribe(store, state =>
-    publish(pubsub, {"state": State.stateToJs(state)})
-  );
+  Store.subscribe(store, state => publish(pubsub, State.serialize(state)));
 
   {
     "Query": Query.resolvers(store),
