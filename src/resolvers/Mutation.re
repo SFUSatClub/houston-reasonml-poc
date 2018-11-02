@@ -1,6 +1,9 @@
 open Schema;
 
+/* We don't access the root for the root resolvers so i'm defining an abstract type for it. */
 type root;
+
+/* Create wrappers for the helper functions so we can call them within the ReasonML code */
 
 [@bs.val] [@bs.module "./helpers"]
 external readJsonFile : string => Js.Promise.t(commandSequence) = "";
@@ -12,6 +15,8 @@ external writeJsonFile : (string, commandSequence) => Js.Promise.t(string) =
 [@bs.val] [@bs.module "./helpers"]
 external injectIdToObjTree : commandSequenceInput => commandSequence = "";
 
+/* Mirrors the Mutation type in the GraphQL schema */
+
 type mutation = {
   .
   "createCommandSequence":
@@ -19,6 +24,11 @@ type mutation = {
     Js.Promise.t(commandSequence),
   "executeCommandSequence": (root, {. "id": string}) => Js.Promise.t(bool),
 };
+
+/*
+   Actual implementation of the root resolvers.
+   Note that the resolvers take "store" as a dependency. We inject a store value in the "Resolvers.re" file.
+ */
 
 let createCommandSequence = (_root, args) => {
   let commandSequenceInput = args##sequence;

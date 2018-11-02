@@ -1,3 +1,5 @@
+/* Mirrors the type definitions in the GraphQL Schema. */
+
 type commandArgument = {
   .
   "id": string,
