@@ -25,7 +25,7 @@ In a new tab
 
 ```graphql
 subscription {
-  state: {
+  state {
     uplink {
       inProgress
       sequenceId
