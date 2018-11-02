@@ -16,14 +16,64 @@ function uplinkStart(uplinkState, sequence) {
         ];
 }
 
+function uplinkSend(uplinkState, id) {
+  var unresolved = uplinkState[/* unresolved */2];
+  var pending = uplinkState[/* pending */1];
+  var isPending = List.exists((function (cId) {
+          return cId === id;
+        }), pending);
+  return /* record */[
+          /* sequenceId */uplinkState[/* sequenceId */0],
+          /* pending */List.filter((function (cId) {
+                    return cId !== id;
+                  }))(pending),
+          /* unresolved */isPending ? /* :: */[
+              id,
+              unresolved
+            ] : unresolved,
+          /* successful */uplinkState[/* successful */3],
+          /* failed */uplinkState[/* failed */4],
+          /* inProgress */uplinkState[/* inProgress */5]
+        ];
+}
+
+function uplinkTimeout(uplinkState, id) {
+  var failed = uplinkState[/* failed */4];
+  var unresolved = uplinkState[/* unresolved */2];
+  var isUnresolved = List.exists((function (cId) {
+          return cId === id;
+        }), unresolved);
+  return /* record */[
+          /* sequenceId */uplinkState[/* sequenceId */0],
+          /* pending */uplinkState[/* pending */1],
+          /* unresolved */List.filter((function (cId) {
+                    return cId !== id;
+                  }))(unresolved),
+          /* successful */uplinkState[/* successful */3],
+          /* failed */isUnresolved ? /* :: */[
+              id,
+              failed
+            ] : failed,
+          /* inProgress */uplinkState[/* inProgress */5]
+        ];
+}
+
 function reducer(state, action) {
-  if (action.tag) {
-    return state;
-  } else {
-    return /* record */[/* uplink */uplinkStart(state[/* uplink */0], action[0])];
+  switch (action.tag | 0) {
+    case 0 : 
+        return /* record */[/* uplink */uplinkStart(state[/* uplink */0], action[0])];
+    case 1 : 
+        return /* record */[/* uplink */uplinkSend(state[/* uplink */0], action[0])];
+    case 2 : 
+        return state;
+    case 3 : 
+        return /* record */[/* uplink */uplinkTimeout(state[/* uplink */0], action[0])];
+    
   }
 }
 
 exports.uplinkStart = uplinkStart;
+exports.uplinkSend = uplinkSend;
+exports.uplinkTimeout = uplinkTimeout;
 exports.reducer = reducer;
 /* No side effect */

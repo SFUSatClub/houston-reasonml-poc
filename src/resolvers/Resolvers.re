@@ -1,6 +1,6 @@
 type pubsub;
 
-let publish: (pubsub, State.serializableType) => unit = [%bs.raw
+let publish: (pubsub, State.streamEvent) => unit = [%bs.raw
   {|(pubsub, serializableState) => { pubsub.publish("STATE", serializableState)}|}
 ];
 

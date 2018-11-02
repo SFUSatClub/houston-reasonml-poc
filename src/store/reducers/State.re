@@ -20,7 +20,7 @@ type state = {uplink: uplinkState};
 
 let initialState = {uplink: initialUplinkState};
 
-type serializableType = {
+type streamEvent = {
   .
   "state": {
     .
@@ -36,7 +36,7 @@ type serializableType = {
   },
 };
 
-let serialize: state => serializableType =
+let serialize: state => streamEvent =
   ({uplink}) => {
     let {sequenceId, pending, unresolved, successful, failed, inProgress} = uplink;
     {
