@@ -5,6 +5,7 @@ type Query {
 
 type Mutation {
   createCommandSequence(sequence: CommandSequenceInput!): CommandSequence!
+  executeCommandSequence(id: ID!): Boolean!
 }
 
 type Subscription {

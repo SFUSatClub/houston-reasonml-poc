@@ -1,7 +1,7 @@
 const { GraphQLServer, PubSub } = require("graphql-yoga");
 
 const pubsub = new PubSub();
-const resolvers = require("./resolvers/Resolvers.bs").resolvers;
+const resolvers = require("./resolvers/Resolvers.bs").init(pubsub);
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
