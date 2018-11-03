@@ -1,65 +1,164 @@
 type Query {
+  """
+  About this schema
+  """
   info: String!
+  """
+  Find a command-sequence by Id
+  """
   commandSequence(id: ID!): CommandSequence
 }
 
 type Mutation {
+  """
+  Create a command-sequence
+  """
   createCommandSequence(sequence: CommandSequenceInput!): CommandSequence!
+  """
+  Uplink a command-sequence
+  """
   executeCommandSequence(id: ID!): Boolean!
 }
 
 type Subscription {
+  """
+  Subscribe to all the state changes from the server
+  """
   state: State!
 }
 
 input CommandSequenceInput {
+  """
+  Name of the command sequence
+  This field should be unique between all the command sequences
+  """
   name: String!
+  """
+  What does this command sequence accomplishes when uplinked successfully
+  """
   description: String!
+  """
+  List of commands to be executed
+  """
   commands: [CommandInput!]!
 }
 
 input CommandInput {
+  """
+  The identifier for the command
+  """
   name: String!
+  """
+  How long to wait in ms before marking the command as failed
+  """
   timeout: Int!
+  """
+  How long to wait in ms before executing this command
+  """
   wait: Int!
+  """
+  List of command arguments
+  """
   arguments: [CommandArgumentInput!]!
 }
 
 input CommandArgumentInput {
+  """
+  Name of the argument,
+  This field should be unique within the command
+  """
   name: String!
+  """
+  The value of the argument
+  """
   value: String!
 }
 
 type CommandSequence {
   id: ID!
+  """
+  Name of the command sequence
+  This field should be unique between all the command sequences
+  """
   name: String!
+  """
+  What does this command sequence accomplishes when uplinked successfully
+  """
   description: String!
+  """
+  List of commands to be executed
+  """
   commands: [Command!]!
 }
 
 type Command {
   id: ID!
+  """
+  The identifier for the command
+  """
   name: String!
+  """
+  How long to wait in ms before marking the command as failed
+  """
   timeout: Int!
+  """
+  How long to wait in ms before executing this command
+  """
   wait: Int!
+  """
+  List of command arguments
+  """
   arguments: [CommandArgument!]!
 }
 
 type CommandArgument {
   id: ID!
+  """
+  Name of the argument,
+  This field should be unique within the command
+  """
   name: String!
+  """
+  The value of the argument
+  """
   value: String!
 }
 
+"""
+As a command sequence is uplinked, command ids move between the following lists
+Pending > Unresolved > successful | failed
+"""
 type UplinkState {
+  """
+  If the uplink is still in progress
+  """
   inProgress: Boolean!
+  """
+  The Id of the cammand sequence that's currently being uplinked
+  """
   sequenceId: ID
+  """
+  Commands that have not yet been sent
+  """
   pending: [ID!]!
+  """
+  Commands that have been sent but not yet resolved (succeeded or failed)
+  """
   unresolved: [ID!]!
+  """
+  Commands that have recieved an "Ack"
+  """
   successful: [ID!]!
+  """
+  Commands that have timedout
+  """
   failed: [ID!]!
 }
 
+"""
+Represents the entier state of the server
+For now the only state is around uplinking a command sequence
+"""
 type State {
   uplink: UplinkState!
 }
