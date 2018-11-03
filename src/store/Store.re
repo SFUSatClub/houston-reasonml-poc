@@ -18,5 +18,6 @@ let dispatch = ({reducer, state, observers}, action) => {
 
 let getState = store => store.state^;
 
+/* TODO: change the implementation to return a unsubscribe function */
 let subscribe = ({observers}, listener) =>
   observers := [listener, ...observers^];
