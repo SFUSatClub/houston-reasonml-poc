@@ -5,10 +5,7 @@ var Helpers = require("./helpers");
 
 function resolvers() {
   return {
-          info: (function () {
-              return "Houston ReasonML PoC: Houston is SFU Satellite design team's ground control station";
-            }),
-          commandSequence: (function (_, args) {
+          findCommandSequence: (function (_, args) {
               return Helpers.readJsonFile("src/command_sequence/" + (args.id + ".json"));
             })
         };

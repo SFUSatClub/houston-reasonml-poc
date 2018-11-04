@@ -8,9 +8,9 @@ module.exports = ({ fs, hash }) => {
     });
   };
 
-  const writeJsonFile = (path, sequence) => {
+  const writeJsonFile = (path, sequence, indent = 2) => {
     return new Promise((resolve, reject) => {
-      fs.writeFile(path, JSON.stringify(sequence, null, 2), error => {
+      fs.writeFile(path, JSON.stringify(sequence, null, indent), error => {
         if (error) reject(error);
         else resolve(path);
       });

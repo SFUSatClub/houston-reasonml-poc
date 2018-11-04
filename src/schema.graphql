@@ -1,164 +1,106 @@
 type Query {
-  """
-  About this schema
-  """
-  info: String!
-  """
-  Find a command-sequence by Id
-  """
-  commandSequence(id: ID!): CommandSequence
+  findCommandSequence(id: ID!): CommandSequence
 }
 
 type Mutation {
-  """
-  Create a command-sequence
-  """
   createCommandSequence(sequence: CommandSequenceInput!): CommandSequence!
   """
-  Uplink a command-sequence
+  uplinkCommandSequence checks if all the conditions for are met before returning.
+  - Command Sequence is valid
+  - The port is open
+  If all conditions are met it returns true and starts the uplink process.
+  Otherwise, it returns false and does not attempt to uplink the sequence.
   """
-  executeCommandSequence(id: ID!): Boolean!
+  uplinkCommandSequence(id: ID!): Boolean!
 }
 
+"""
+We only have a single subscription type: state.
+Since our application only runs locally we don't need to optimize for performance.
+And we can subscribe to all the state changes in the server.
+"""
 type Subscription {
-  """
-  Subscribe to all the state changes from the server
-  """
   state: State!
 }
 
 input CommandSequenceInput {
-  """
-  Name of the command sequence
-  This field should be unique between all the command sequences
-  """
   name: String!
-  """
-  What does this command sequence accomplishes when uplinked successfully
-  """
   description: String!
-  """
-  List of commands to be executed
-  """
   commands: [CommandInput!]!
 }
 
+"""
+A command is only used in a command sequence.
+Let's say we have two commands A and B. We have just uplinked A.
+
+{uplink A}------------------------------------{timeout A}--------------------------->
+------------------------------{uplink B}-------------------{timeout B}-------------->
+         |______{wait B}______|        |____{timeout B}____|
+
+We wait for "wait" ms before uplinking B.
+After we have uplinked "B" be we wait for "timeout" ms before marking B as a Failed.
+"""
 input CommandInput {
-  """
-  The identifier for the command
-  """
   name: String!
-  """
-  How long to wait in ms before marking the command as failed
-  """
   timeout: Int!
-  """
-  How long to wait in ms before executing this command
-  """
   wait: Int!
-  """
-  List of command arguments
-  """
   arguments: [CommandArgumentInput!]!
 }
 
 input CommandArgumentInput {
-  """
-  Name of the argument,
-  This field should be unique within the command
-  """
   name: String!
-  """
-  The value of the argument
-  """
   value: String!
 }
 
 type CommandSequence {
   id: ID!
-  """
-  Name of the command sequence
-  This field should be unique between all the command sequences
-  """
   name: String!
-  """
-  What does this command sequence accomplishes when uplinked successfully
-  """
   description: String!
-  """
-  List of commands to be executed
-  """
   commands: [Command!]!
 }
 
+"""
+A command is only used in a command sequence.
+Let's say we have two commands A and B. We have just uplinked A.
+
+{uplink A}------------------------------------{timeout A}--------------------------->
+------------------------------{uplink B}-------------------{timeout B}-------------->
+         |______{wait B}______|        |____{timeout B}____|
+
+We wait for "wait" ms before uplinking B.
+After we have uplinked "B" be we wait for "timeout" ms before marking B as a Failed.
+"""
 type Command {
   id: ID!
-  """
-  The identifier for the command
-  """
   name: String!
-  """
-  How long to wait in ms before marking the command as failed
-  """
   timeout: Int!
-  """
-  How long to wait in ms before executing this command
-  """
   wait: Int!
-  """
-  List of command arguments
-  """
   arguments: [CommandArgument!]!
 }
 
 type CommandArgument {
   id: ID!
-  """
-  Name of the argument,
-  This field should be unique within the command
-  """
   name: String!
-  """
-  The value of the argument
-  """
   value: String!
 }
 
 """
-As a command sequence is uplinked, command ids move between the following lists
-Pending > Unresolved > successful | failed
+A command has a life cycle. It starts in the Pending state.
+Moves to Unresolved and ends up in either Successful or Failed.
+- Pending: we have not uplinked the command yet
+- Unresolved: we have uplinked the command but have not received an "Ack" and the command has not timedout yet
+- Successful: we have received a "Ack" before the command timedout
+- Failed: the command timedout before we received an "Ack"
 """
 type UplinkState {
-  """
-  If the uplink is still in progress
-  """
   inProgress: Boolean!
-  """
-  The Id of the cammand sequence that's currently being uplinked
-  """
   sequenceId: ID
-  """
-  Commands that have not yet been sent
-  """
   pending: [ID!]!
-  """
-  Commands that have been sent but not yet resolved (succeeded or failed)
-  """
   unresolved: [ID!]!
-  """
-  Commands that have recieved an "Ack"
-  """
   successful: [ID!]!
-  """
-  Commands that have timedout
-  """
   failed: [ID!]!
 }
 
-"""
-Represents the entier state of the server
-For now the only state is around uplinking a command sequence
-"""
 type State {
   uplink: UplinkState!
 }

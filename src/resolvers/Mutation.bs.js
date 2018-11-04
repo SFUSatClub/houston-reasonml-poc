@@ -14,7 +14,7 @@ function createCommandSequence(_, args) {
               }));
 }
 
-function executeCommandSequence(store) {
+function uplinkCommandSequence(store) {
   var uplink = Uplink$HoustonPocReasonml.uplink(store);
   return (function (_, args) {
       var path = "src/command_sequence/" + (args.id + ".json");
@@ -29,11 +29,11 @@ function executeCommandSequence(store) {
 function resolvers(store) {
   return {
           createCommandSequence: createCommandSequence,
-          executeCommandSequence: executeCommandSequence(store)
+          uplinkCommandSequence: uplinkCommandSequence(store)
         };
 }
 
 exports.createCommandSequence = createCommandSequence;
-exports.executeCommandSequence = executeCommandSequence;
+exports.uplinkCommandSequence = uplinkCommandSequence;
 exports.resolvers = resolvers;
 /* ./helpers Not a pure module */

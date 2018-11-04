@@ -3,14 +3,14 @@ type root;
 /* Create wrappers for the helper functions so we can call them within the ReasonML code */
 
 [@bs.val] [@bs.module "./helpers"]
-external readJsonFile : string => Js.Promise.t(Schema.commandSequence) = "";
+external readCommandSequence : string => Js.Promise.t(Schema.commandSequence) =
+  "readJsonFile";
 
 /* Mirrors the Query type in the GraphQL schema */
 
 type query = {
   .
-  "info": unit => string,
-  "commandSequence":
+  "findCommandSequence":
     (root, {. "id": string}) => Js.Promise.t(Schema.commandSequence),
 };
 
@@ -22,9 +22,8 @@ type query = {
 
 let resolvers: Store.t(State.state, Action.action) => query =
   _store => {
-    "info": () => "Houston ReasonML PoC: Houston is SFU Satellite design team's ground control station",
-    "commandSequence": (_root, args) => {
+    "findCommandSequence": (_root, args) => {
       let path = "src/command_sequence/" ++ args##id ++ ".json";
-      readJsonFile(path);
+      readCommandSequence(path);
     },
   };
