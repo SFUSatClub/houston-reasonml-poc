@@ -79,7 +79,6 @@ type Command {
 }
 
 type CommandArgument {
-  id: ID!
   name: String!
   value: String!
 }

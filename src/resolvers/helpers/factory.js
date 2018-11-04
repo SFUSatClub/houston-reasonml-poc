@@ -29,9 +29,15 @@ module.exports = ({ fs, hash }) => {
     return res;
   };
 
+  const injectSequenceAndCommandIds = commandSequence => ({
+    ...commandSequence,
+    id: hash(commandSequence),
+    commands: commandSequence.commands.map((c, i) => ({ ...c, id: `${i}` }))
+  });
+
   return {
     readJsonFile,
     writeJsonFile,
-    injectIdToObjTree
+    injectSequenceAndCommandIds
   };
 };

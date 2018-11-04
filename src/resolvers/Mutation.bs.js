@@ -7,7 +7,7 @@ var Uplink$HoustonPocReasonml = require("../uplink/Uplink.bs.js");
 
 function createCommandSequence(_, args) {
   var commandSequenceInput = args.sequence;
-  var commandSequence = Helpers.injectIdToObjTree(commandSequenceInput);
+  var commandSequence = Helpers.injectSequenceAndCommandIds(commandSequenceInput);
   var path = "src/command_sequence/" + (commandSequence.id + ".json");
   return Helpers.writeJsonFile(path, commandSequence).then((function (path) {
                 return Helpers.readJsonFile(path);

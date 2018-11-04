@@ -15,7 +15,8 @@ external writeCommandSequence :
   "writeJsonFile";
 
 [@bs.val] [@bs.module "./helpers"]
-external injectIdToObjTree : commandSequenceInput => commandSequence = "";
+external injectSequenceAndCommandIds : commandSequenceInput => commandSequence =
+  "";
 
 /* Mirrors the Mutation type in the GraphQL schema */
 
@@ -34,7 +35,7 @@ type mutation = {
 
 let createCommandSequence = (_root, args) => {
   let commandSequenceInput = args##sequence;
-  let commandSequence = injectIdToObjTree(commandSequenceInput);
+  let commandSequence = injectSequenceAndCommandIds(commandSequenceInput);
   let path = "src/command_sequence/" ++ commandSequence##id ++ ".json";
 
   writeCommandSequence(path, commandSequence)
