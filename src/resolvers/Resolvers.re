@@ -22,7 +22,8 @@ external subscriptions : stateAsyncIterator = "";
 
 let init = (pubsub: pubsub) => {
   let store = Store.create(Reducer.reducer, State.initialState);
-  Store.subscribe(store, state => publish(pubsub, State.serialize(state)));
+  let _unsubscribe =
+    Store.subscribe(store, state => publish(pubsub, State.serialize(state)));
 
   {
     /* here we are passing the store as a dependency to the resolvers */

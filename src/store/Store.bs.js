@@ -8,7 +8,8 @@ function create(reducer, initialState) {
   return /* record */[
           /* state */[initialState],
           /* reducer */reducer,
-          /* observers */[/* [] */0]
+          /* observers */[/* [] */0],
+          /* observerCount */[0]
         ];
 }
 
@@ -17,7 +18,7 @@ function dispatch(param, action) {
   var newState = Curry._2(param[/* reducer */1], state[0], action);
   state[0] = newState;
   return List.iter((function (obs) {
-                return Curry._1(obs, newState);
+                return Curry._1(obs[/* call */1], newState);
               }), param[/* observers */2][0]);
 }
 
@@ -25,13 +26,26 @@ function getState(store) {
   return store[/* state */0][0];
 }
 
-function subscribe(param, listener) {
+function subscribe(param, call) {
+  var observerCount = param[/* observerCount */3];
   var observers = param[/* observers */2];
+  var listener_000 = /* id */observerCount[0];
+  var listener = /* record */[
+    listener_000,
+    /* call */call
+  ];
   observers[0] = /* :: */[
     listener,
     observers[0]
   ];
-  return /* () */0;
+  var unsubscribe = function () {
+    observers[0] = List.filter((function (l) {
+              return l[/* id */0] !== observerCount[0];
+            }))(observers[0]);
+    return /* () */0;
+  };
+  observerCount[0] = observerCount[0] + 1 | 0;
+  return unsubscribe;
 }
 
 exports.create = create;
