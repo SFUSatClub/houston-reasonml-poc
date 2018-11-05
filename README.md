@@ -44,6 +44,6 @@ In a new tab
 
 ```graphql
 mutation {
-  executeCommandSequence(id: "fd9220efed406a1a0324398e8e44d71a44b65d11")
+  uplinkCommandSequence(id: "fd9220efed406a1a0324398e8e44d71a44b65d11")
 }
 ```

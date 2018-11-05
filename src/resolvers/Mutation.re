@@ -43,14 +43,13 @@ let createCommandSequence = (_root, args) => {
 };
 
 let uplinkCommandSequence = store => {
-  let uplink = Uplink.uplink(store);
+  let uplink = Uplink.create(store);
 
   (_root, args) => {
     let path = "src/command_sequence/" ++ args##id ++ ".json";
     readCommandSequence(path)
     |> Js.Promise.then_(sequence => {
-         let (start, _stop) = uplink(sequence);
-         start();
+         Uplink.start(uplink, sequence);
          Js.Promise.resolve(true);
        });
   };
