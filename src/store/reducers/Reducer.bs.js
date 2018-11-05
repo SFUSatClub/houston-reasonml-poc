@@ -2,17 +2,18 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var State$HoustonPocReasonml = require("./State.bs.js");
 
-function uplinkStart(uplinkState, sequence) {
+function uplinkStart(_, sequence) {
   return /* record */[
           /* sequenceId : Some */[sequence.id],
           /* pending */List.map((function (c) {
                   return c.id;
                 }), sequence.commands),
-          /* unresolved */uplinkState[/* unresolved */2],
-          /* successful */uplinkState[/* successful */3],
-          /* failed */uplinkState[/* failed */4],
-          /* inProgress */uplinkState[/* inProgress */5]
+          /* unresolved */State$HoustonPocReasonml.initialUplinkState[/* unresolved */2],
+          /* successful */State$HoustonPocReasonml.initialUplinkState[/* successful */3],
+          /* failed */State$HoustonPocReasonml.initialUplinkState[/* failed */4],
+          /* inProgress */true
         ];
 }
 
@@ -22,18 +23,25 @@ function uplinkSend(uplinkState, id) {
   var isPending = List.exists((function (cId) {
           return cId === id;
         }), pending);
+  var uplinkState_000 = /* sequenceId */uplinkState[/* sequenceId */0];
+  var uplinkState_001 = /* pending */List.filter((function (cId) {
+            return cId !== id;
+          }))(pending);
+  var uplinkState_002 = /* unresolved */isPending ? /* :: */[
+      id,
+      unresolved
+    ] : unresolved;
+  var uplinkState_003 = /* successful */uplinkState[/* successful */3];
+  var uplinkState_004 = /* failed */uplinkState[/* failed */4];
+  var uplinkState_005 = /* inProgress */uplinkState[/* inProgress */5];
+  var inProgress = (List.length(uplinkState_001) + List.length(uplinkState_002) | 0) !== 0;
   return /* record */[
-          /* sequenceId */uplinkState[/* sequenceId */0],
-          /* pending */List.filter((function (cId) {
-                    return cId !== id;
-                  }))(pending),
-          /* unresolved */isPending ? /* :: */[
-              id,
-              unresolved
-            ] : unresolved,
-          /* successful */uplinkState[/* successful */3],
-          /* failed */uplinkState[/* failed */4],
-          /* inProgress */uplinkState[/* inProgress */5]
+          uplinkState_000,
+          uplinkState_001,
+          uplinkState_002,
+          uplinkState_003,
+          uplinkState_004,
+          /* inProgress */inProgress
         ];
 }
 
@@ -43,37 +51,60 @@ function uplinkTimeout(uplinkState, id) {
   var isUnresolved = List.exists((function (cId) {
           return cId === id;
         }), unresolved);
+  var uplinkState_000 = /* sequenceId */uplinkState[/* sequenceId */0];
+  var uplinkState_001 = /* pending */uplinkState[/* pending */1];
+  var uplinkState_002 = /* unresolved */List.filter((function (cId) {
+            return cId !== id;
+          }))(unresolved);
+  var uplinkState_003 = /* successful */uplinkState[/* successful */3];
+  var uplinkState_004 = /* failed */isUnresolved ? /* :: */[
+      id,
+      failed
+    ] : failed;
+  var uplinkState_005 = /* inProgress */uplinkState[/* inProgress */5];
+  var inProgress = (List.length(uplinkState_001) + List.length(uplinkState_002) | 0) !== 0;
+  return /* record */[
+          uplinkState_000,
+          uplinkState_001,
+          uplinkState_002,
+          uplinkState_003,
+          uplinkState_004,
+          /* inProgress */inProgress
+        ];
+}
+
+function uplinkStop(uplinkState) {
   return /* record */[
           /* sequenceId */uplinkState[/* sequenceId */0],
           /* pending */uplinkState[/* pending */1],
-          /* unresolved */List.filter((function (cId) {
-                    return cId !== id;
-                  }))(unresolved),
+          /* unresolved */uplinkState[/* unresolved */2],
           /* successful */uplinkState[/* successful */3],
-          /* failed */isUnresolved ? /* :: */[
-              id,
-              failed
-            ] : failed,
-          /* inProgress */uplinkState[/* inProgress */5]
+          /* failed */uplinkState[/* failed */4],
+          /* inProgress */false
         ];
 }
 
 function reducer(state, action) {
-  switch (action.tag | 0) {
-    case 0 : 
-        return /* record */[/* uplink */uplinkStart(state[/* uplink */0], action[0])];
-    case 1 : 
-        return /* record */[/* uplink */uplinkSend(state[/* uplink */0], action[0])];
-    case 2 : 
-        return state;
-    case 3 : 
-        return /* record */[/* uplink */uplinkTimeout(state[/* uplink */0], action[0])];
-    
+  if (typeof action === "number") {
+    return /* record */[/* uplink */uplinkStop(state[/* uplink */0])];
+  } else {
+    switch (action.tag | 0) {
+      case 0 : 
+          return /* record */[/* uplink */uplinkStart(state[/* uplink */0], action[0])];
+      case 1 : 
+          return /* record */[/* uplink */uplinkSend(state[/* uplink */0], action[0])];
+      case 2 : 
+          return state;
+      case 3 : 
+          return /* record */[/* uplink */uplinkTimeout(state[/* uplink */0], action[0])];
+      
+    }
   }
 }
 
 exports.uplinkStart = uplinkStart;
 exports.uplinkSend = uplinkSend;
 exports.uplinkTimeout = uplinkTimeout;
+exports.uplinkStop = uplinkStop;
 exports.reducer = reducer;
 /* No side effect */
