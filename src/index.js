@@ -17,7 +17,7 @@ port.pipe(new Readline({ delimiter: "\n" }));
 const { GraphQLServer, PubSub } = require("graphql-yoga");
 
 const pubsub = new PubSub();
-const resolvers = require("./resolvers/Resolvers.bs").init(pubsub);
+const resolvers = require("./resolvers/Resolvers.bs").init(pubsub, port);
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",

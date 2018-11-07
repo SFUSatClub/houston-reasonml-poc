@@ -4,18 +4,21 @@ type timerId;
 [@bs.val] external setTimeout : (unit => unit, int) => timerId = "setTimeout";
 [@bs.val] external clearTimeout : timerId => unit = "clearTimeout";
 
-type store = Store.t(State.state, Action.action);
-
 type t = {
   timers: ref(list(timerId)),
-  store,
+  store: Shared.store,
+  con: Shared.con,
 };
 
-let create = store => {timers: ref([]), store};
+let create: Shared.dep => t =
+  dep => {timers: ref([]), store: dep.store, con: dep.con};
 
-let createTimers = (store, commands) => {
+let createTimers = ({store, con}, commands) => {
   let timeout = id => Store.dispatch(store, UplinkTimeout(id));
-  let send = id => Store.dispatch(store, UplinkSend(id));
+  let send = id => {
+    con.write(id) |> ignore;
+    Store.dispatch(store, UplinkSend(id));
+  };
 
   let rec aux = (commands, acc) =>
     switch (commands) {
@@ -32,13 +35,17 @@ let createTimers = (store, commands) => {
   aux(commands, 0);
 };
 
-let start = ({store, timers}, sequence) => {
+let handle = data => Js.log(data);
+
+let start = (dep, sequence) => {
+  let {store, timers, con} = dep;
   let uplinkState = Store.getState(store).uplink;
   uplinkState.inProgress ?
     () :
     {
       Store.dispatch(store, UplinkStart(sequence));
-      timers := createTimers(store, sequence##commands);
+      timers := createTimers(dep, sequence##commands);
+      con.subscribe(handle) |> ignore;
     };
 };
 

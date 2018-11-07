@@ -55,8 +55,8 @@ let uplinkCommandSequence = store => {
   };
 };
 
-let resolvers: Store.t(State.state, Action.action) => mutation =
-  store => {
+let resolvers: Shared.dep => mutation =
+  dep => {
     "createCommandSequence": createCommandSequence,
-    "uplinkCommandSequence": uplinkCommandSequence(store),
+    "uplinkCommandSequence": uplinkCommandSequence(dep),
   };

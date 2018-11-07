@@ -7,7 +7,7 @@ type enc =
 module type Encoder = {type t; let encode: t => enc;};
 module type Decoder = {type t; let decode: buffer => t;};
 
-module type MakeType =
+module type S =
   (Enc: Encoder, Dec: Decoder) =>
   {
     type t;
@@ -23,7 +23,7 @@ module type MakeType =
     let listen: t => unit;
   };
 
-module Make: MakeType =
+module Make: S =
   (Enc: Encoder, Dec: Decoder) => {
     type e = Enc.t;
     type d = Dec.t;
@@ -70,12 +70,14 @@ module Make: MakeType =
     };
   };
 
-module MockEncoder: Encoder = {
+module MockEncoder = {
   type t = string;
   let encode = s => Str(s);
 };
 
-module MockDecoder: Decoder = {
+module MockDecoder = {
   type t = string;
   let decode = Node_buffer.toString;
 };
+
+module Con = Make(MockEncoder, MockDecoder);

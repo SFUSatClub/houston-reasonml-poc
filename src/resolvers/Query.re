@@ -20,10 +20,9 @@ type query = {
    Since non of the resolvers use the store value, we are ignoring it for now.
  */
 
-let resolvers: Store.t(State.state, Action.action) => query =
-  _store => {
-    "findCommandSequence": (_root, args) => {
-      let path = "src/command_sequence/" ++ args##id ++ ".json";
-      readCommandSequence(path);
-    },
-  };
+let resolvers: query = {
+  "findCommandSequence": (_root, args) => {
+    let path = "src/command_sequence/" ++ args##id ++ ".json";
+    readCommandSequence(path);
+  },
+};

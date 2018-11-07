@@ -1,19 +1,24 @@
-/*
-  We take pubsub as a dependency here. "init" is called in the index.js file and passed a pubsub value.
-  Since we don't work with the pubsub value directly in Reason we are defining it as an abstract type.
- */
+let init = (pubsub: Pubsub.t, port: Port.t) => {
+  let link = Connection.Con.create(port);
+  Connection.Con.listen(link);
 
-let init = (pubsub: Pubsub.t) => {
+  let con: Shared.con = {
+    write: Connection.Con.write(link),
+    subscribe: Connection.Con.subscribe(link),
+  };
+
   let store = Store.create(Reducer.reducer, State.initialState);
   let _unsubscribe =
     Store.subscribe(store, state =>
       Pubsub.publishState(pubsub, Subscription.mapToSchemaState(state))
     );
 
+  let dep: Shared.dep = {store, con};
+
   {
     /* here we are passing the store as a dependency to the resolvers */
-    "Query": Query.resolvers(store),
-    "Mutation": Mutation.resolvers(store),
+    "Query": Query.resolvers,
+    "Mutation": Mutation.resolvers(dep),
     "Subscription": Subscription.resolvers(pubsub),
   };
 };
