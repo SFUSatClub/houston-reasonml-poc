@@ -69,3 +69,13 @@ module Make: MakeType =
       unsubscribe;
     };
   };
+
+module MockEncoder: Encoder = {
+  type t = string;
+  let encode = s => Str(s);
+};
+
+module MockDecoder: Decoder = {
+  type t = string;
+  let decode = Node_buffer.toString;
+};

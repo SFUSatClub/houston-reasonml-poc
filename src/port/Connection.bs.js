@@ -2,6 +2,7 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 
 function Make(funarg) {
@@ -65,5 +66,19 @@ function Make(funarg) {
     });
 }
 
+function encode(s) {
+  return /* Str */Block.__(0, [s]);
+}
+
+var MockEncoder = /* module */[/* encode */encode];
+
+function decode(prim) {
+  return prim.toString();
+}
+
+var MockDecoder = /* module */[/* decode */decode];
+
 exports.Make = Make;
+exports.MockEncoder = MockEncoder;
+exports.MockDecoder = MockDecoder;
 /* No side effect */
