@@ -4,8 +4,8 @@
 var List = require("bs-platform/lib/js/list.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 
-function Make() {
-  return (function (funarg) {
+function Make(funarg) {
+  return (function (funarg$1) {
       var create = function (port) {
         return /* record */[
                 /* port */port,
@@ -14,20 +14,21 @@ function Make() {
               ];
       };
       var write = function (link, data) {
-        switch (data.tag | 0) {
+        var match = Curry._1(funarg[/* encode */0], data);
+        switch (match.tag | 0) {
           case 0 : 
-              return link[/* port */0].write(data[0]);
+              return link[/* port */0].write(match[0]);
           case 1 : 
-              return link[/* port */0].write(data[0]);
+              return link[/* port */0].write(match[0]);
           case 2 : 
-              return link[/* port */0].write(data[0]);
+              return link[/* port */0].write(match[0]);
           
         }
       };
       var listen = function (link) {
         link[/* port */0].on("data", (function (buffer) {
                 var param = link;
-                var data = Curry._1(funarg[/* decode */0], buffer);
+                var data = Curry._1(funarg$1[/* decode */0], buffer);
                 return List.iter((function (obs) {
                               return Curry._1(obs[/* f */1], data);
                             }), param[/* observers */2][0]);

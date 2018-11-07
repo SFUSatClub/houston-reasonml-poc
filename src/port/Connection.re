@@ -4,14 +4,14 @@ type enc =
   | Arr(array(int))
   | Buf(buffer);
 
-module type Encoder = {let encode: enc => enc;};
+module type Encoder = {type t; let encode: t => enc;};
 module type Decoder = {type t; let decode: buffer => t;};
 
 module type MakeType =
   (Enc: Encoder, Dec: Decoder) =>
   {
     type t;
-    type e = enc;
+    type e = Enc.t;
     type d = Dec.t;
     type p = Port.t;
 
@@ -25,7 +25,7 @@ module type MakeType =
 
 module Make: MakeType =
   (Enc: Encoder, Dec: Decoder) => {
-    type e = enc;
+    type e = Enc.t;
     type d = Dec.t;
     type p = Port.t;
 
@@ -45,7 +45,7 @@ module Make: MakeType =
     let create = port => {port, observers: ref([]), observerIncId: ref(0)};
 
     let write = (link, data) =>
-      switch (data) {
+      switch (Enc.encode(data)) {
       | Str(string) => Port.write(link.port, `Str(string))
       | Arr(array) => Port.write(link.port, `Arr(array))
       | Buf(buffer) => Port.write(link.port, `Buf(buffer))
