@@ -2,6 +2,7 @@
 
 - first [setup ReasonML](https://reasonml.github.io/docs/en/installation)
 - then `npm install` and `npm start` and go to http://localhost:4000
+- you can explore the `schema.graphql` to learn more about the functionalities available to you
 
 ## Create a command sequence
 

@@ -4,11 +4,12 @@ Implements Query, Mutation, and Subscription resolvers.
 
 ## Files
 
+- `pubsub` A wrapper around GraphQL Pubsub for interoperability
 - `Query.re` Implements the Query root resolvers, `info` and `commandSequence`.
 - `Mutation.re` Implements the Mutation root resolvers, `createCommandSequence` and `executeCommandSequence`
-- `Subscription.js` Implments the Subscription root resolver `state`
+- `Subscription.re` Implments the Subscription root resolver `state`
 - `Schema.re` Mirrors the object types in `schema.graphql` schema definition file
-- `Resolver.re` Injects `state` into the Query and Mutation resolvers. Returns a resolver object that is passed to the `GraphQLServer` in the `index.js`
+- `Resolver.re` Injects `Shared.dep` into the Mutation resolvers and `pubsub` into the Subscription resolvers. Returns a resolver object that is passed to the `GraphQLServer` in the `index.js`
 
 ## Notes
 

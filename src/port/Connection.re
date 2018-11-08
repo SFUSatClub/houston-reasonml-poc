@@ -1,4 +1,9 @@
 type buffer = Port.buffer;
+
+/*
+ Connection expects an Encoder.encode to return a value of type enc.
+ enc is a type that models what a SerialPort port expects
+ */
 type enc =
   | Str(string)
   | Arr(array(int))
@@ -6,6 +11,11 @@ type enc =
 
 module type Encoder = {type t; let encode: t => enc;};
 module type Decoder = {type t; let decode: buffer => t;};
+
+/*
+ Make is a functor. Given a specific Encoder and Decoder modules it creates a Connection module.
+ You can then create a value of type Connection by calling the create function.
+ */
 
 module type S =
   (Enc: Encoder, Dec: Decoder) =>

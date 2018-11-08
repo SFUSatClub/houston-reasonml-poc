@@ -1,5 +1,7 @@
 /**
  * SerialPort
+ * Here we are setting up a Mocked port. We can write to this port and read back the echo (what we just wrote).
+ * The
  */
 const SerialPort = require("@serialport/stream");
 const Readline = require("@serialport/parser-readline");
@@ -17,7 +19,7 @@ port.pipe(new Readline({ delimiter: "\n" }));
 const { GraphQLServer, PubSub } = require("graphql-yoga");
 
 const pubsub = new PubSub();
-const resolvers = require("./resolvers/Resolvers.bs").init(pubsub, port);
+const resolvers = require("./resolvers/Resolvers.bs").init(pubsub, port); // Note that the resolvers take port and pubsub as dependencies.
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",

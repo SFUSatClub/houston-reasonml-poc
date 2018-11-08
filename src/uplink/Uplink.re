@@ -49,7 +49,13 @@ let start = (dep, sequence) => {
     };
 };
 
-let stop = uplink => {
-  List.iter(clearTimeout, uplink.timers^);
-  uplink.timers := [];
+let stop = ({timers, store}) => {
+  let uplinkState = Store.getState(store).uplink;
+  uplinkState.inProgress ?
+    {
+      List.iter(clearTimeout, timers^);
+      timers := [];
+      Store.dispatch(store, UplinkStop);
+    } :
+    ();
 };
