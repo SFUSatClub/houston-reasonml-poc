@@ -1,10 +1,22 @@
+module MockedConnection =
+  Connection.Make(
+    {
+      type t = string;
+      let encode = s => Connection.Str(s);
+    },
+    {
+      type t = string;
+      let decode = Node_buffer.toString;
+    },
+  );
+
 let init = (pubsub: Pubsub.t, port: Port.t) => {
-  let link = Connection.Con.create(port);
-  Connection.Con.listen(link);
+  let link = MockedConnection.create(port);
+  MockedConnection.listen(link);
 
   let con: Shared.con = {
-    write: Connection.Con.write(link),
-    subscribe: Connection.Con.subscribe(link),
+    write: MockedConnection.write(link),
+    subscribe: MockedConnection.subscribe(link),
   };
 
   let store = Store.create(Reducer.reducer, State.initialState);

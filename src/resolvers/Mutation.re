@@ -42,8 +42,8 @@ let createCommandSequence = (_root, args) => {
   |> Js.Promise.then_(path => readCommandSequence(path));
 };
 
-let uplinkCommandSequence = store => {
-  let uplink = Uplink.create(store);
+let uplinkCommandSequence = dep => {
+  let uplink = Uplink.create(dep);
 
   (_root, args) => {
     let path = "src/command_sequence/" ++ args##id ++ ".json";
