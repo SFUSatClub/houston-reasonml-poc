@@ -1,5 +1,7 @@
 # Helpers
 
+You should watch [Structuring JavaScript projects for testability](https://youtu.be/aL6SouuO0_k)
+
 Helpers are JavaScript functions that are used by the Resolvers.
 
 - `readJsonFile` parses the JSON file identified by the path into a JS object. This function returns a promise.

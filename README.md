@@ -1,4 +1,8 @@
-# Getting stated
+# Houston
+
+ReasonML + GraphQL + SerialPort proof of concept. You can read more about it here https://medium.com/sfu-sat/houston-reasonml-serialport-graphql-b3d6f1532a2
+
+## Getting stated
 
 - first [setup ReasonML](https://reasonml.github.io/docs/en/installation)
 - then `npm install` and `npm start` and go to http://localhost:4000

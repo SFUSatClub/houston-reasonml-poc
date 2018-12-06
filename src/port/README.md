@@ -1,5 +1,7 @@
 # Port
 
+You should read [ReasonML: functors](http://2ality.com/2018/01/functors-reasonml.html)
+
 - `Port` A wrapper around SerialPort port for interoperability.
 - `Connection` We won't directly write to a Port. We use connection for this.
   To create a connection module, you need to specify a Encoder and Decoder. For example

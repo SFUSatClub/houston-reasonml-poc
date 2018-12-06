@@ -2,6 +2,9 @@
 
 Implements Query, Mutation, and Subscription resolvers.
 
+- You should read [Tutorial: GraphQL Subscriptions on the Server](https://blog.apollographql.com/tutorial-graphql-subscriptions-server-side-e51c32dc2951)
+- You can read [Exploring Reason and GraphQL](https://blog.apollographql.com/exploring-reason-and-graphql-ff877df60d2a)
+
 ## Files
 
 - `pubsub` A wrapper around GraphQL Pubsub for interoperability
