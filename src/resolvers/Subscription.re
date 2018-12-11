@@ -1,9 +1,9 @@
 open Schema;
 
-let resolvers: Pubsub.t => subscription =
+let resolvers: PubSub.t => subscription =
   pubsub => {
     "state": {
-      "subscribe": () => Pubsub.asyncIterator(pubsub, "STATE"),
+      "subscribe": () => PubSub.asyncIterator(pubsub, "STATE"),
     },
   };
 

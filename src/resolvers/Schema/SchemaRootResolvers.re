@@ -17,4 +17,4 @@ type mutation = {
   "uplinkCommandSequence": (root, {. "id": string}) => Js.Promise.t(bool),
 };
 
-type subscription = {. "state": {. "subscribe": unit => Pubsub.stream}};
+type subscription = {. "state": {. "subscribe": unit => PubSub.stream}};

@@ -10,7 +10,7 @@ module MockedConnection =
     },
   );
 
-let init = (pubsub: Pubsub.t, port: Port.t) => {
+let init = (pubsub: PubSub.t, port: Port.t) => {
   let link = MockedConnection.create(port);
   MockedConnection.listen(link);
 
@@ -22,7 +22,7 @@ let init = (pubsub: Pubsub.t, port: Port.t) => {
   let store = Store.create(Reducer.reducer, State.initialState);
   let _unsubscribe =
     Store.subscribe(store, state =>
-      Pubsub.publishState(pubsub, Subscription.mapToSchemaState(state))
+      PubSub.publishState(pubsub, Subscription.mapToSchemaState(state))
     );
 
   let dep: Shared.dep = {store, con};
