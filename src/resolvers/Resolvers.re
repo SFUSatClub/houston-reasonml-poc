@@ -12,7 +12,7 @@ let init = (pubsub: PubSub.t, port: Port.t) => {
   let store = Store.create(Reducer.reducer, State.initialState);
   let _unsubscribe =
     Store.subscribe(store, state =>
-      PubSub.publishState(pubsub, Subscription.mapToSchemaState(state))
+      PubSub.publishState(pubsub, State.mapToSchemaState(state))
     );
 
   let dep: Shared.dep = {store, con};
