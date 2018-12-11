@@ -1,14 +1,4 @@
-module MockedConnection =
-  Connection.Make(
-    {
-      type t = string;
-      let encode = s => Connection.Str(s);
-    },
-    {
-      type t = string;
-      let decode = Node_buffer.toString;
-    },
-  );
+open Connection;
 
 let init = (pubsub: PubSub.t, port: Port.t) => {
   let link = MockedConnection.create(port);

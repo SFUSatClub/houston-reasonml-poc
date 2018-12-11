@@ -69,3 +69,15 @@ module Make =
     unsubscribe;
   };
 };
+
+module MockedConnection =
+  Make(
+    {
+      type t = string;
+      let encode = s => Str(s);
+    },
+    {
+      type t = string;
+      let decode = Node_buffer.toString;
+    },
+  );
