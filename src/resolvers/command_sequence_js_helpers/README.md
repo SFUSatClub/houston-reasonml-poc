@@ -16,5 +16,5 @@ Helpers are JavaScript functions that are used by the Resolvers.
 
 ## Files
 
-- `factory.js` implements the functions mentioned above and takes `fs` and `hash` as dependencies.
-- `index.js` injects `fs` and `hash` dependencies
+- `helpers.factory.js` implements the functions mentioned above and takes `fs` and `hash` as dependencies.
+- `helpers.js` injects `fs` and `hash` dependencies

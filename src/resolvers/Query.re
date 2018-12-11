@@ -1,12 +1,5 @@
 open Schema;
-
-/* Create wrappers for the helper functions so we can call them within the ReasonML code */
-
-[@bs.val] [@bs.module "./helpers"]
-external readCommandSequence : string => Js.Promise.t(Schema.commandSequence) =
-  "readJsonFile";
-
-/* Mirrors the Query type in the GraphQL schema */
+open Helpers;
 
 /*
    Actual implementation of the root resolvers
