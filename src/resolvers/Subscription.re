@@ -1,6 +1,4 @@
-type root;
-
-type subscription = {. "state": {. "subscribe": unit => Pubsub.stream}};
+open Schema;
 
 let resolvers: Pubsub.t => subscription =
   pubsub => {

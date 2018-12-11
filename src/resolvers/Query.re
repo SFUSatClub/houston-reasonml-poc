@@ -1,4 +1,4 @@
-type root;
+open Schema;
 
 /* Create wrappers for the helper functions so we can call them within the ReasonML code */
 
@@ -7,12 +7,6 @@ external readCommandSequence : string => Js.Promise.t(Schema.commandSequence) =
   "readJsonFile";
 
 /* Mirrors the Query type in the GraphQL schema */
-
-type query = {
-  .
-  "findCommandSequence":
-    (root, {. "id": string}) => Js.Promise.t(Schema.commandSequence),
-};
 
 /*
    Actual implementation of the root resolvers
